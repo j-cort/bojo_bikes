@@ -85,4 +85,4 @@ rspec test - Clean Prod Code? - **Refactor Unnecessary**
 
 --------------
 
-The above process of breaking down user stories, feature testing and unit testing (RGR) is repeated through to project completion.
+The above process of breaking down user stories, feature testing, unit testing (RGR) and analysing errors is repeated through to project completion.
