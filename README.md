@@ -1,6 +1,5 @@
 # Boris Bikes 
 ## Makers Academy Week 1 Project
----------------------------------
 
 ## Summary: A Guided project to build a program which emulates the system underpinning London's Santader Cycles service (previously "Boris Bikes")
 
