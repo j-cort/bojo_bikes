@@ -55,3 +55,34 @@ NameError (uninitialized constant DockingStation)
 - **Solution?** Create the 'DockingStation' class
 
 The feature test fails because the DockingStation class does not exist.
+
+## Unit Tests
+Check that a certain unit of code, with a distinct function (related to a particular feature) behaves as expected.
+
+RGR - Red, Green, Refactor
+--------------------------
+rspec test - DockingStation class exists - **FAIL**
+./spec/docking_station_spec.rb
+```
+describe DockingStation do
+end
+```
+
+rspec test - DockingStation class exists - **PASS**
+./spec/docking_station_spec.rb
+```
+require 'docking_station'
+describe DockingStation do
+end
+```
+./lib/docking_station.rb
+```
+class DockingStation
+end
+```
+
+rspec test - Clean Prod Code? - **Refactor Unnecessary**
+
+--------------
+
+The above process of breaking down user stories, feature testing and unit testing (RGR) is repeated through to project completion.
