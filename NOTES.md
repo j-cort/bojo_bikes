@@ -1,8 +1,9 @@
-### Bojo Bikes Project Notes
+# Bojo Bikes Project Journal
 
-## Clarify Program Design Using Domain Models
+## Domain Models
+Clarify program design by using domain models to break down and represent user stories.
 
-# User Story
+**User Story**
 As a person,
 So that I can use a bike,
 I'd like a docking station to release a bike.
@@ -16,7 +17,7 @@ I'd like a docking station to release a bike.
 Person > "release bike" > Docking Station
 Docking Station > "confirm release" > Person
 
-# User Story
+**User Story**
 As a person,
 So that I can use a good bike,
 I'd like to see if a bike is working
@@ -28,3 +29,20 @@ I'd like to see if a bike is working
 
 Person > "working?" > Bike
 Bike > "T/F" > Person
+
+## Feature Tests
+Check that the various aspects of our program are working well together using feature tests.
+
+*Test if a 'docking_station' instance can be produced from the 'DockingStation' class*
+
+```
+3.0.0 :005 > docking_station = DockingStation.new
+Traceback (most recent call last):
+        5: from /Users/james/.rvm/rubies/ruby-3.0.0/bin/irb:23:in `<main>'
+        4: from /Users/james/.rvm/rubies/ruby-3.0.0/bin/irb:23:in `load'
+        3: from /Users/james/.rvm/rubies/ruby-3.0.0/lib/ruby/gems/3.0.0/gems/irb-1.3.0/exe/irb:11:in `<top (required)>'
+        2: from (irb):4:in `<main>'
+        1: from (irb):5:in `rescue in <main>'
+NameError (uninitialized constant DockingStation)
+```
+The feature test fails because the DockingStation class does not exist.
