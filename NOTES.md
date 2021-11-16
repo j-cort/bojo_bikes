@@ -45,4 +45,13 @@ Traceback (most recent call last):
         1: from (irb):5:in `rescue in <main>'
 NameError (uninitialized constant DockingStation)
 ```
+
+**Error**
+---------
+- **Type?** NameError
+- **Filepath?** from /Users/james/.rvm/rubies/ruby-3.0.0/bin/irb:23:in
+- **Line Number?** 23
+- **Meaning?** NameError is raised when you reference a constant or a variable which isn't defined in the current context.
+- **Solution?** Create the 'DockingStation' class
+
 The feature test fails because the DockingStation class does not exist.
