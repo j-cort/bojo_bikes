@@ -46,7 +46,7 @@ Traceback (most recent call last):
 NameError (uninitialized constant DockingStation)
 ```
 
-**Error**
+**Errors**
 ---------
 - **Type?** NameError
 - **Filepath?** from /Users/james/.rvm/rubies/ruby-3.0.0/bin/irb:23:in
