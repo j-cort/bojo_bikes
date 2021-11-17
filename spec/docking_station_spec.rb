@@ -44,8 +44,7 @@ describe DockingStation do
     end
   end
   it 'does not allow user to dock a bike if the rack is not empty' do 
-    bike1, bike2 = Bike.new, Bike.new
-    subject.dock(bike1)
-    expect{ subject.dock(bike2) }.to raise_error 'Rack full, cannot dock bike.'
+    20.times { subject.dock(Bike.new) }
+    expect{ subject.dock(Bike.new) }.to raise_error 'Rack full, cannot dock bike.'
   end
 end

@@ -12,7 +12,7 @@ class DockingStation
   end
 
   def dock(bike)
-    raise 'Rack full, cannot dock bike.' unless @rack.empty? 
+    raise 'Rack full, cannot dock bike.' unless @rack.count < 20
     @rack << bike 
   end
 
