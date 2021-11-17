@@ -7,11 +7,13 @@ class DockingStation
   end
 
   def release_bike
-    Bike.new
+    raise 'Sorry, no bikes available to release.' unless bike_available?
+    @rack.shift
   end
 
-  def dock_bike(bike)
-    @rack << bike
+  def dock(bike)
+    raise 'Rack full, cannot dock bike.' unless @rack.empty? 
+    @rack << bike 
   end
 
   def bike_available?
