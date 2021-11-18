@@ -5,13 +5,14 @@ describe DockingStation do
     expect(subject).to respond_to :release_bike
   end
   it 'returns an instance of the "Bike" class when release_bike is called' do
-    subject.rack << Bike.new
+    subject.dock Bike.new
     expect(subject.release_bike).to be_instance_of(Bike)
   end
   it 'returns true when asked if its released bike is working' do
-    subject.rack << Bike.new
-    bike = subject.release_bike
-    expect(bike.working?).to eq true
+    bike = Bike.new
+    subject.dock(bike)
+    bike_out = subject.release_bike
+    expect(bike_out.working?).to eq true
   end
   it 'allows user to dock a bike (instance)' do
     expect(subject).to respond_to(:dock).with(1).argument
@@ -43,8 +44,28 @@ describe DockingStation do
       expect { subject.release_bike }.to raise_error('Sorry, no bikes available to release.')
     end
   end
-  it 'does not allow user to dock a bike if the rack is not empty' do 
+  it 'does not allow user to dock a bike if the rack is full' do 
     DockingStation::DEFAULT_CAPACITY.times { subject.dock(Bike.new) }
     expect{ subject.dock(Bike.new) }.to raise_error 'Rack full, cannot dock bike.'
   end
-end
+  it 'allows user to set capactiy attribute when new DockingStation is initialized' do
+    station = DockingStation.new(30)
+    expect(station.capacity).to eq 30
+  end
+  it 'sets capacity attribute to DEFAULT_CAPACITY if no value is set by the user' do
+    station = DockingStation.new
+    expect(station.capacity).to eq 20
+  end
+  it 'does not release broken bikes' do
+    bike = Bike.new
+    bike.report_broken 
+    subject.dock(bike) 
+    expect{ subject.release_bike }.to raise_error "Bike broken, cannot release bike"
+  end
+  it 'allows broken bikes to be docked' do
+    bike = Bike.new
+    bike.report_broken 
+    subject.dock(bike)
+    expect(subject.rack.include?(bike)).to eq true
+  end
+  end
