@@ -1,18 +1,23 @@
 require 'docking_station'
 
 describe DockingStation do
+  # let(:bike) { double :bike }
+  
   it 'allows user to release a bike' do
     expect(subject).to respond_to :release_bike
   end
   it 'returns an instance of the "Bike" class when release_bike is called' do
-    subject.dock Bike.new
-    expect(subject.release_bike).to be_instance_of(Bike)
+    #double zone - XX
+    allow(bike).to receive(:working?).and_return(true)
+    subject.dock(bike) 
+    expect(subject.release_bike).to be_instance_of(Class)
   end
   it 'returns true when asked if its released bike is working' do
-    bike = Bike.new
-    subject.dock(bike)
-    bike_out = subject.release_bike
-    expect(bike_out.working?).to eq true
+    #double zone - fixed
+    bike = double(:bike, :working? => true)
+    subject.dock(bike) 
+    bike = subject.release_bike
+    expect(bike.working?).to eq true
   end
   it 'allows user to dock a bike (instance)' do
     expect(subject).to respond_to(:dock).with(1).argument
@@ -33,7 +38,7 @@ describe DockingStation do
     expect(subject).to respond_to :bike_available? 
   end
   it 'returns true if a bike is available' do
-    subject.dock(Bike.new)
+    subject.dock(double(:bike)) # double zone
     expect(subject.bike_available?).to eq true
   end
   it 'returns false if a bike is not available' do
@@ -45,8 +50,8 @@ describe DockingStation do
     end
   end
   it 'does not allow user to dock a bike if the rack is full' do 
-    DockingStation::DEFAULT_CAPACITY.times { subject.dock(Bike.new) }
-    expect{ subject.dock(Bike.new) }.to raise_error 'Rack full, cannot dock bike.'
+    DockingStation::DEFAULT_CAPACITY.times { subject.dock double(:bike) } # double zone
+    expect{ subject.dock double(:bike) }.to raise_error 'Rack full, cannot dock bike.'
   end
   it 'allows user to set capactiy attribute when new DockingStation is initialized' do
     station = DockingStation.new(30)
@@ -57,15 +62,19 @@ describe DockingStation do
     expect(station.capacity).to eq 20
   end
   it 'does not release broken bikes' do
-    bike = Bike.new
+    # double zone - fixed
+    # allow(bike).to receive(:report_broken)
+    # allow(bike). to receive(:working?).and_return(false)
+    bike = double(:bike, :working? => false, :report_broken => nil)
     bike.report_broken 
     subject.dock(bike) 
     expect{ subject.release_bike }.to raise_error "Bike broken, cannot release bike"
   end
   it 'allows broken bikes to be docked' do
-    bike = Bike.new
+    # double zone - fixed
+    bike = double(:bike, :report_broken => nil)
     bike.report_broken 
     subject.dock(bike)
     expect(subject.rack.include?(bike)).to eq true
   end
-  end
+end

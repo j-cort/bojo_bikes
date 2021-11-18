@@ -20,7 +20,7 @@ class DockingStation
   end
 
   def broken?
-    @rack[0].broken
+    !@rack[0].working?
   end
 
   public
