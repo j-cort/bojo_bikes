@@ -4,6 +4,7 @@ class DockingStation
   DEFAULT_CAPACITY = 20 
   attr_reader :rack
   attr_reader :capacity
+
   def initialize(capacity = DEFAULT_CAPACITY)
     @rack = []
     @capacity = capacity
@@ -39,4 +40,5 @@ class DockingStation
   def bike_available?
     @rack.empty? ? false : true
   end
+  
 end
