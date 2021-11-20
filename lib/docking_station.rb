@@ -43,11 +43,7 @@ class DockingStation
   end
 
   def load_broken_into(van)
-    @rack.each do | bike |
-      if !bike.working?
-        van.back_of << bike          
-      end     
-    end
+    @rack.each { | bike | van.back_of << bike if !bike.working? }
     @rack.select! { |bike| bike.working? }
   end
 

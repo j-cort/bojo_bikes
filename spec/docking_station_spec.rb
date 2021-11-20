@@ -44,7 +44,7 @@ describe DockingStation do
     end
 
     it 'does not allow user to dock a bike if the rack is full' do 
-      DockingStation::DEFAULT_CAPACITY.times { subject.dock(bike) } # double zone
+      DockingStation::DEFAULT_CAPACITY.times { subject.dock(bike) } 
       expect{ subject.dock(bike) }.to raise_error 'Rack full, cannot dock bike.'
     end
 
@@ -94,101 +94,112 @@ describe DockingStation do
   end  
 
   context "(sending bikes for repair)" do
-  
+    before(:each) do
+      @b1, @b2, @b3, @b4 = Bike.new, Bike.new, Bike.new, Bike.new
+      @b1.report_broken
+      @b2.report_broken
+      @van = Van.new
+      subject.dock(@b1) 
+      subject.dock(@b2) 
+      subject.dock(@b3)
+      subject.dock(@b4)
+      subject.load_broken_into(@van)
+    end
+
     it "allows user to remove broken bikes" do
-      expect(subject).to respond_to(:load_broken_into)
+      expect(subject).to respond_to(:load_broken_into).with(1).argument
     end
 
-    it "removes broken bikes from rack" do
-      bike = Bike.new
-      van = Van.new
-      bike.report_broken
-      subject.dock(bike)
-      subject.load_broken_into(van)
-      expect(subject.rack.include?(bike)).to eq false
+    it "removes all broken bikes from rack" do
+      # bike = Bike.new
+      # van = Van.new
+      # bike.report_broken
+      # subject.dock(bike)
+      # subject.load_broken_into(van)
+      expect(subject.rack.include?(@b1 || @b2)).to eq false
     end
 
-    it "does not remove working bikes from rack" do
-      bike = Bike.new
-      van = Van.new
-      subject.dock(bike)
-      subject.load_broken_into(van)
-      expect(subject.rack.include?(bike)).to eq true
+    it "does not remove any working bikes from rack" do
+      # bike = Bike.new
+      # van = Van.new
+      # subject.dock(bike)
+      # subject.load_broken_into(van)
+      expect(subject.rack.include?(@b3 && @b4)).to eq true
     end 
 
-    it "places broken bikes in back of van" do
-      bike = Bike.new
-      van = Van.new
-      bike.report_broken
-      subject.dock(bike)
-      subject.load_broken_into(van)
-      expect(van.back_of.include?(bike)).to eq true
+    it "places all broken bikes in back of van" do
+      # bike = Bike.new
+      # van = Van.new
+      # bike.report_broken
+      # subject.dock(bike)
+      # subject.load_broken_into(van)
+      expect(@van.back_of.include?(@b1 && @b2)).to eq true
     end
 
-    it "does not place working bikes in back of van" do
-      bike = Bike.new
-      van = Van.new
-      subject.dock(bike)
-      subject.load_broken_into(van)
-      expect(van.back_of.include?(bike)).to eq false
+    it "does not place any working bikes in back of van" do
+      # bike = Bike.new
+      # van = Van.new
+      # subject.dock(bike)
+      # subject.load_broken_into(van)
+      expect(@van.back_of.include?(@b3 || @b4)).to eq false
     end
 
-    it "when multiple broken and working bikes are docked, no broken bikes remain in rack" do
-      s = DockingStation.new
-      b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
-      b1.report_broken
-      b2.report_broken
-      v = Van.new
-      s.dock(b1) 
-      s.dock(b2) 
-      s.dock(b3)
-      s.dock(b4)
-      s.load_broken_into(v)
-      expect(s.rack.all? { |bike| bike != b1 && bike != b2 }).to eq true
-    end
+    # it "when multiple broken and working bikes are docked, no broken bikes remain in rack" do
+    #   # s = DockingStation.new
+    #   # b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
+    #   # b1.report_broken
+    #   # b2.report_broken
+    #   # v = Van.new
+    #   # s.dock(b1) 
+    #   # s.dock(b2) 
+    #   # s.dock(b3)
+    #   # s.dock(b4)
+    #   # s.load_broken_into(v)
+    #   expect(subject.rack.all? { |bike| bike != b1 && bike != b2 }).to eq true
+    # end
 
-    it "when multiple broken and working bikes are docked, no working bikes are removed from rack" do
-      s = DockingStation.new
-      b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
-      b1.report_broken
-      b2.report_broken
-      v = Van.new
-      s.dock(b1) 
-      s.dock(b2) 
-      s.dock(b3)
-      s.dock(b4)
-      s.load_broken_into(v)
-      # is this test correct??
-      expect(s.rack.include?(b3 && b4)).to eq true 
-    end
+    # it "when multiple broken and working bikes are docked, no working bikes are removed from rack" do
+    #   s = DockingStation.new
+    #   b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
+    #   b1.report_broken
+    #   b2.report_broken
+    #   v = Van.new
+    #   s.dock(b1) 
+    #   s.dock(b2) 
+    #   s.dock(b3)
+    #   s.dock(b4)
+    #   s.load_broken_into(v)
+    #   # is this test correct??
+    #   expect(s.rack.include?(b3 && b4)).to eq true 
+    # end
 
-    it "when multiple broken and working bikes are docked, all broken bikes are moved to van" do
-      s = DockingStation.new
-      b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
-      b1.report_broken
-      b2.report_broken
-      v = Van.new
-      s.dock(b1) 
-      s.dock(b2) 
-      s.dock(b3)
-      s.dock(b4)
-      s.load_broken_into(v)
-      expect(v.back_of.include?(b1 && b2)).to eq true
-    end
+    # it "when multiple broken and working bikes are docked, all broken bikes are moved to van" do
+    #   s = DockingStation.new
+    #   b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
+    #   b1.report_broken
+    #   b2.report_broken
+    #   v = Van.new
+    #   s.dock(b1) 
+    #   s.dock(b2) 
+    #   s.dock(b3)
+    #   s.dock(b4)
+    #   s.load_broken_into(v)
+    #   expect(v.back_of.include?(b1 && b2)).to eq true
+    # end
 
-    it "when multiple broken and working bikes are docked, no working bikes are moved to van" do
-      s = DockingStation.new
-      b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
-      b1.report_broken
-      b2.report_broken
-      v = Van.new
-      s.dock(b1) 
-      s.dock(b2) 
-      s.dock(b3)
-      s.dock(b4)
-      s.load_broken_into(v)
-      expect(v.back_of.all? { |bike| bike != b3 && bike != b4 }).to eq true
-    end
+    # it "when multiple broken and working bikes are docked, no working bikes are moved to van" do
+    #   s = DockingStation.new
+    #   b1, b2, b3, b4 = Bike.new, Bike.new, Bike.new, Bike.new
+    #   b1.report_broken
+    #   b2.report_broken
+    #   v = Van.new
+    #   s.dock(b1) 
+    #   s.dock(b2) 
+    #   s.dock(b3)
+    #   s.dock(b4)
+    #   s.load_broken_into(v)
+    #   expect(v.back_of.all? { |bike| bike != b3 && bike != b4 }).to eq true
+    # end
     
   end
   
