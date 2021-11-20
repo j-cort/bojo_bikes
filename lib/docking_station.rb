@@ -1,4 +1,5 @@
 require_relative 'bike'
+require_relative 'van'
 
 class DockingStation
   DEFAULT_CAPACITY = 20 
@@ -40,5 +41,14 @@ class DockingStation
   def bike_available?
     @rack.empty? ? false : true
   end
-  
+
+  def load_broken_into(van)
+    @rack.each do | bike |
+      if !bike.working?
+        van.back_of << bike          
+      end     
+    end
+    @rack.select! { |bike| bike.working? }
+  end
+
 end
