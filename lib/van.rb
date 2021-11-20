@@ -14,12 +14,7 @@ class Van
   end
 
   def transfer_working_to(station)
-    @back_of.each do |bike| 
-      if bike.working?
-        station.dock(bike) 
-        @successfully_docked << bike
-      end
-    end 
+    @back_of.each { |bike| station.dock(bike) and @successfully_docked << bike if bike.working? }
     @back_of.select! { |bike| !@successfully_docked.include?(bike)}
   end
   
